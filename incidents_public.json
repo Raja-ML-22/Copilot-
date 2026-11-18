@@ -1,0 +1,44 @@
+[
+  {
+    "incident_id": "INC-001",
+    "incident_type": "fraud_detection",
+    "model_type": "binary_classification",
+    "description": "Fraud recall dropped from 0.9 to 0.5.",
+    "observed_metrics": {
+      "baseline_recall": 0.9,
+      "current_recall": 0.5,
+      "baseline_precision": 0.6923,
+      "current_precision": 0.7143,
+      "baseline_threshold": 0.35,
+      "current_threshold": 0.7
+    },
+    "available_evidence": [],
+    "missing_information": [
+      "confusion_matrix",
+      "score_distribution",
+      "config_change_history",
+      "feature_drift",
+      "feature_missing_rates"
+    ]
+  },
+  {
+    "incident_id": "INC-002",
+    "incident_type": "fraud_detection",
+    "model_type": "binary_classification",
+    "description": "Fraud recall dropped from 0.779 to 0.6685.",
+    "observed_metrics": {
+      "baseline_recall": 0.779,
+      "current_recall": 0.6685,
+      "baseline_precision": 0.8545,
+      "current_precision": 0.8582
+    },
+    "available_evidence": [],
+    "missing_information": [
+      "confusion_matrix",
+      "score_distribution",
+      "pipeline_change_history",
+      "feature_drift",
+      "feature_missing_rates"
+    ]
+  }
+]

@@ -1,0 +1,25 @@
+[
+  {
+    "incident_id": "INC-001",
+    "injected_fault": "threshold_change",
+    "expected_diagnosis": "threshold_change_is_plausible",
+    "expected_behavior": "investigate_and_report_uncertainty",
+    "details": {
+      "baseline_threshold": 0.35,
+      "faulty_threshold": 0.7,
+      "discriminating_test": "Evaluate both thresholds on the same fixed scores and labels; compare recall, precision, false negatives."
+    }
+  },
+  {
+    "incident_id": "INC-002",
+    "injected_fault": "missingness_spike",
+    "expected_diagnosis": "missingness_spike_is_plausible",
+    "expected_behavior": "investigate_and_report_uncertainty",
+    "details": {
+      "seed": 7,
+      "feature_idx": 2,
+      "actual_missing_rate": 0.3056,
+      "discriminating_test": "Inject missing values into the suspect feature with the model and examples fixed; compare against baseline."
+    }
+  }
+]

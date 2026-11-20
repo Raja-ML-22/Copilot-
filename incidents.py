@@ -166,6 +166,6 @@ def build_benchmark():
 
 if __name__ == "__main__":
     for case in build_benchmark():
-
+        print(case.public())
         print(case.hidden())
         print()

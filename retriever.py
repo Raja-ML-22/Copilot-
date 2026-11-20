@@ -49,11 +49,12 @@ def rank_runbooks(query, runbooks=None):
     scored.sort(key=lambda item: item[2], reverse=True)
     return scored
 
-
 if __name__ == "__main__":
     for q in [
         "recall drop threshold change",
-        "missing values increased in production",
-        "gpu memory error",
+        "missing values increased",
+        "feature distribution shift psi",
+        "column renamed upstream",
+        "unit changed from seconds to milliseconds",
     ]:
         print(q, "->", rank_runbooks(q))

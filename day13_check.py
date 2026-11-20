@@ -46,3 +46,4 @@ if __name__ == "__main__":
         if name == "INC-002":
             assert f"f{m['feature_idx']}" in inc2["missingness"]["numbers"]["flagged_features"]
     print("Right evidence, no false accusations: OK")
+    

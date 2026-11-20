@@ -86,3 +86,63 @@ def validate_benchmark(cases):
             errors.append(f"{inc_id}: {err}")
 
     return errors
+
+import re
+from runbooks import RUNBOOKS
+
+REQUIRED_TEXT_KEYS = ["runbook_id", "title"]
+REQUIRED_LIST_KEYS = [
+    "symptoms",
+    "possible_causes",
+    "evidence_to_check",
+    "diagnostic_tests",
+    "limitations",
+]
+
+
+def check_runbook(rb):
+    errors = []
+    # YOU WRITE (1): add one error message for every key in
+    #   REQUIRED_TEXT_KEYS + REQUIRED_LIST_KEYS that is not in rb
+    for k in REQUIRED_TEXT_KEYS + REQUIRED_LIST_KEYS:
+        if k not in rb:
+            errors.append(f"missing required key: {k}")
+
+    # YOU WRITE (2): for every key in REQUIRED_LIST_KEYS that IS in rb,
+    #   add an error if the value is not a list, or is an empty list
+    for k in REQUIRED_LIST_KEYS:
+        if k in rb:
+            val = rb[k]
+            if not isinstance(val, list) or len(val) == 0:
+                errors.append(f"key '{k}' must be a non-empty list")
+
+    # YOU WRITE (3): add an error if rb.get("runbook_id", "") is not in the
+    #   form RB-000 (hint: re.fullmatch(r"RB-\d{3}", text), and text must be a string)
+    rid = rb.get("runbook_id", "")
+    if not isinstance(rid, str) or not re.fullmatch(r"RB-\d{3}", rid):
+        errors.append(f"invalid runbook_id format: '{rid}' (expected RB-XXX)")
+
+    return errors
+
+
+def check_all_runbooks(runbooks):
+    errors = []
+    seen = set()
+    for rb in runbooks:
+        rid = rb.get("runbook_id", "?")
+        if rid in seen:
+            errors.append(f"{rid}: duplicate runbook_id")
+        seen.add(rid)
+        errors += [f"{rid}: {e}" for e in check_runbook(rb)]
+    return errors
+
+if __name__ == "__main__":
+    print(check_all_runbooks(RUNBOOKS))
+    bad = {
+        "runbook_id": "RB-9",
+        "title": "Bad",
+        "symptoms": [],
+        "possible_causes": "oops",
+    }
+    errs = check_runbook(bad)
+    print(len(errs), errs)

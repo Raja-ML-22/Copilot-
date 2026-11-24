@@ -34,12 +34,20 @@ EVAL_SET = [
     {"query": "docker build failed because apt-get returned 404", "expected": None, "kind": "out_of_scope"},
     {"query": "css grid layout is overlapping on mobile screens", "expected": None, "kind": "out_of_scope"},
     {"query": "kubernetes pod keeps crashing with exit code 137", "expected": None, "kind": "out_of_scope"},
-        # Near-domain but NOT covered by any runbook (a good retriever finds no good match)
     {"query": "ground truth labels arrive two weeks late so we cannot compute recall yet", "expected": None, "kind": "out_of_scope_near"},
     {"query": "predictions take twice as long to return since the last release", "expected": None, "kind": "out_of_scope_near"},
     {"query": "the nightly retraining job failed and the model is three months stale", "expected": None, "kind": "out_of_scope_near"},
+    {"query": "ever since we tightened the score limit, the fraud team says tons of bad transactions are sneaking through", "expected": "RB-001", "kind": "holdout"},
+    {"query": "precision looks fine but the model is missing a lot more true positives this week", "expected": "RB-001", "kind": "holdout"},
+    {"query": "loan amount is coming in empty for about a third of applications this morning", "expected": "RB-002", "kind": "holdout"},
+    {"query": "our data quality dashboard shows null rate on three features shot up from 2% to 30%", "expected": "RB-002", "kind": "holdout"},
+    {"query": "input values look nothing like the training set anymore, average basket size keeps creeping up", "expected": "RB-003", "kind": "holdout"},
+    {"query": "our inputs from this month do not line up with last quarter, the whole mix of users looks different", "expected": "RB-003", "kind": "holdout"},
+    {"query": "the distance feature switched from kilometres to metres overnight", "expected": "RB-004", "kind": "holdout"},
+    {"query": "the date field now comes through as a plain string in a new format, so parsing errors started", "expected": "RB-004", "kind": "holdout"},
 ]
 
 from collections import Counter
 from eval_set import EVAL_SET
-print(len(EVAL_SET), Counter(item["expected"] for item in EVAL_SET))
+if __name__ == "__main__":
+    print(len(EVAL_SET), Counter(item["expected"] for item in EVAL_SET))

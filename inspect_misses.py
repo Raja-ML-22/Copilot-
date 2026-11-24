@@ -11,3 +11,4 @@ for it in EVAL_SET:
     print("\n", it["query"], "| expected", it["expected"])
     for chunk_id, score in results[:5]:
         print("   ", chunk_id, score)
+        

@@ -43,11 +43,11 @@ missingness_spike_runbook = {
     "possible_causes": [
         'An upstream source stops supplying one or more expected fields',
         'The upstream system begins providing incomplete records',
-        'A column is renamed, its data type changes, or a transformation unexpectedly produces null values'
+        'A transformation or join in the feature pipeline unexpectedly produces null values for a feature that still exists'
     ],
     "evidence_to_check": [
     "Compare baseline and current missing-value rates for each feature",
-    "Inspect pipeline changes, data schemas, data types, and upstream data availability",
+    "Inspect pipeline changes, null-handling code and upstream data availability. If a column was renamed, removed or retyped, follow RB-004 instead",
     "Compare model performance under baseline and current missingness conditions using comparable labeled data"
     ],
     "diagnostic_tests": [

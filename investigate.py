@@ -29,6 +29,25 @@ def investigate(evidence, top_k_runbooks=3):
         "top_chunks": results[:3],
     }
 
+def investigate_per_finding(evidence):
+    matches = []
+    for tool, item in evidence.items():
+        if not (item.get("flagged") and item.get("finding")):
+            continue
+        results = rank_semantic(item["finding"], top_k=len(chunks))
+        ranking = runbook_ranking(results)
+        if not ranking:
+            continue
+
+        best = ranking[0]
+        cites = [
+            (cid, score)
+            for cid, score in results
+            if cid.startswith(best + ":")
+        ][:2]
+
+        matches.append({"tool": tool, "runbook": best, "cites": cites})
+    return matches
 
 if __name__ == "__main__":
     base, cur = stable_features()

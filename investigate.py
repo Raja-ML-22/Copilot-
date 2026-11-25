@@ -45,8 +45,18 @@ def investigate_per_finding(evidence):
             for cid, score in results
             if cid.startswith(best + ":")
         ][:2]
+        limits = [
+            cid
+            for cid, _ in results
+            if cid.startswith(best + ":") and ":limitations:" in cid
+        ][:1]
 
-        matches.append({"tool": tool, "runbook": best, "cites": cites})
+        matches.append({
+            "tool": tool,
+            "runbook": best,
+            "cites": cites,
+            "limits": limits,
+        })
     return matches
 
 if __name__ == "__main__":

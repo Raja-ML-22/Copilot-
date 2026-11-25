@@ -8,7 +8,6 @@ def chunk_text(chunk_id):
     rid, section, idx = chunk_id.split(":")
     return RB[rid][section][int(idx) - 1]
 
-
 def build_report(name, evidence):
     flagged = {t: e for t, e in evidence.items() if e.get("flagged")}
     lines = [f"INVESTIGATION REPORT: {name}", ""]
@@ -18,7 +17,7 @@ def build_report(name, evidence):
             "- No tool flagged anything, so there is not enough evidence to point to a runbook."
         )
         lines.append(
-            "- No cause is suggested because no active anomaly was observed."
+            "-  No cause is suggested. This does not mean nothing is wrong: the tools only cover thresholds, missing values and drift."
         )
         return "\n".join(lines)
 
@@ -28,7 +27,13 @@ def build_report(name, evidence):
     for tool, e in flagged.items():
         lines.append(f"- {e['finding']} [evidence: {tool}]")
 
-    lines += ["", "2. RUNBOOKS THAT MATCH (consistent with these findings, not proof of cause)"]
+    unflagged = {t: e for t, e in evidence.items() if not e.get("flagged")}
+    if unflagged:
+        lines += ["", "2. CHECKED AND NOT FLAGGED"]
+        for tool, e in unflagged.items():
+            lines.append(f"- {e['finding']} [evidence: {tool}]")
+
+    lines += ["", "3. RUNBOOKS THAT MATCH (consistent with these findings, not proof of cause)"]
     if not matches:
         lines.append("- No runbook matched the findings.")
     for m in matches:
@@ -37,19 +42,18 @@ def build_report(name, evidence):
         for cid, score in m["cites"]:
             lines.append(f"    [{cid}] (score {score}) {chunk_text(cid)}")
 
-    lines += ["", "3. WHAT THIS EVIDENCE CANNOT SHOW"]
+    lines += ["", "4. WHAT THIS EVIDENCE CANNOT SHOW"]
     for tool, e in flagged.items():
         lines.append(f"- {e['limitation']} [evidence: {tool}]")
     for m in matches:
-        for i, text in enumerate(RB[m["runbook"]]["limitations"], start=1):
-            lines.append(f"- {text} [{m['runbook']}:limitations:{i}]")
+        for cid in m["limits"]:
+            lines.append(f"- {chunk_text(cid)} [{cid}]")
 
-    lines += ["", "4. SUGGESTED NEXT CHECKS (from the matched runbooks)"]
+    lines += ["", "5. SUGGESTED NEXT CHECKS (from the matched runbooks)"]
     for m in matches:
         for i, text in enumerate(RB[m["runbook"]]["diagnostic_tests"], start=1):
             lines.append(f"- {text} [{m['runbook']}:diagnostic_tests:{i}]")
     return "\n".join(lines)
-
 
 if __name__ == "__main__":
     from day13_check import stable_features, collect_evidence
